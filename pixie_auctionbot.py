@@ -18,12 +18,12 @@ import httpx
 from telegram import Bot, Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 from telegram.constants import ParseMode
-TELEGRAM_BOT_TOKEN = "8476978843:AAHLo2ho1R5_PXNv_cDRU764cD729sPjsp8"
-API_URL            = "https://api.pixiechess.xyz/prices"
+
 # ─────────────────────────────────────────────
 # CONFIGURATION
 # ─────────────────────────────────────────────
-
+TELEGRAM_BOT_TOKEN  = "YOUR_BOT_TOKEN_HERE"
+API_URL             = "https://api.pixiechess.xyz/prices"
 
 DEFAULT_THRESHOLD   = 0.019    # ETH — used when user first subscribes
 DROP_STEP_ETH       = 0.001    # re-alert every further drop of this amount
@@ -91,17 +91,24 @@ class UserAlertState:
         self._maybe_reset()
         key = (chat_id, address.lower())
 
-        if key not in self._triggered:
-            if current_eth <= threshold:
-                self._triggered[key] = current_eth
-                return True
+        # Price is above threshold — clear any stored state so it can re-trigger
+        # fresh if it drops again later
+        if current_eth > threshold:
+            self._triggered.pop(key, None)
             return False
+
+        # Price is at or below threshold
+        if key not in self._triggered:
+            # First trigger
+            self._triggered[key] = current_eth
+            return True
 
         last = self._triggered[key]
         next_trigger = round(last - DROP_STEP_ETH, 6)
         if current_eth <= next_trigger:
             self._triggered[key] = current_eth
             return True
+
         return False
 
 
