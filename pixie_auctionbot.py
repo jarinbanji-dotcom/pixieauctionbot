@@ -22,8 +22,8 @@ from telegram.constants import ParseMode
 # ─────────────────────────────────────────────
 # CONFIGURATION
 # ─────────────────────────────────────────────
-TELEGRAM_BOT_TOKEN  = "YOUR_BOT_TOKEN_HERE"
-API_URL             = "https://api.pixiechess.xyz/prices"
+TELEGRAM_BOT_TOKEN = "8476978843:AAHLo2ho1R5_PXNv_cDRU764cD729sPjsp8"
+API_URL            = "https://api.pixiechess.xyz/prices"
 
 DEFAULT_THRESHOLD   = 0.019    # ETH — used when user first subscribes
 DROP_STEP_ETH       = 0.001    # re-alert every further drop of this amount
